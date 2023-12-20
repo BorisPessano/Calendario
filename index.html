@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Asistencia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Registro de Asistencia</h1>
+    <div style="display: inline-block;">
+        <label>Nombre:</label>
+        <input type="text" id="name" name="name">
+    
+        <label>Apellido:</label>
+        <input type="text" id="lastname" name="lastname">
+    
+        <input type="radio" id="Presencial" name="Presencial" value="true">
+        <label for="Presencial">Presencial:</label>
+    
+        <input type="radio" id="Remote" name="Remote" value="true">
+        <label for="Remote">Remoto:</label>
+    </div>
+    
+
+    <button onclick="marcarAsistencia()">Marcar Asistencia</button>
+    
+    <button type="button"><a href="user.html">Registrarse</a></button>
+
+    <div id="registro"></div>
+
+    <script>
+        function marcarAsistencia() {
+            var fecha = new Date();
+            var registro = localStorage.getItem('registro') || '[]';
+            var name = localStorage.getElementById('name');
+            var lastName = localStorage.getElementById('lastname');
+            var presencial = localStorage.getElementById('Presencial');
+            var remote = localStorage.getElementById('Remote');
+            
+            // Llamo al magico
+
+            mostrarRegistro();
+        }
+
+        function mostrarRegistro() {
+            var registro = localStorage.getItem('registro') || '[]';
+            registro = JSON.parse(registro);
+
+            var registroHTML = '<h2>Registro de Asistencia</h2>';
+            if (registro.length > 0) {
+                registroHTML += '<ul>';
+                registro.forEach(function (entrada) {
+                    registroHTML += '<li>' + entrada.fecha + '</li>';
+                });
+                registroHTML += '</ul>';
+            } else {
+                registroHTML += '<p>No hay registros de asistencia.</p>';
+            }
+
+            document.getElementById('registro').innerHTML = registroHTML;
+        }
+
+        // Mostrar el registro al cargar la página
+        mostrarRegistro();
+    </script>
+
+</body>
+</html>

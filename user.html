@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Asistencia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Registro Usuario</h1>
+    <div style="display: inline-flex;">
+        <label>Name:</label>
+        <input type="text" id="Name" name="Name">
+    
+        <label>Surname:</label>
+        <input type="text" id="Surname" name="Surname">
+        
+        <label>Email:</label>
+        <input type="email" id="Email" name="Email">
+        
+        <label>Password:</label>
+        <input type="password" id="Password" name="Password">
+
+        <label>Phone:</label>
+        <input type="text" id="Phone" name="Phone">
+    </div>
+    
+
+    <button onclick="Registrarse()">Registrarse</button>
+    
+
+    <script>
+        function Registrarse() {
+            var fecha = new Date();
+            var name = localStorage.getElementById('Name');
+            var surname = localStorage.getElementById('Surname');
+            var email = localStorage.getElementById('Email');
+            var pass = localStorage.getElementById('Password');
+            
+            // Llamo al magico
+            
+        }
+    </script>
+
+</body>
+</html>
