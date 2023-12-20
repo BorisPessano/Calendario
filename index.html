@@ -19,12 +19,6 @@
         <label>Email:</label>
         <input type="email" id="email" name="email">
 
-        <label>Nombre:</label>
-        <input type="text" id="name" name="name">
-    
-        <label>Apellido:</label>
-        <input type="text" id="lastname" name="lastname">
-    
         <input type="checkbox" id="Presencial" name="Presencial" value=1>
         <label for="Presencial">Presencial:</label>
     
@@ -34,6 +28,8 @@
     
 
     <button onclick="marcarAsistencia()">Marcar Asistencia</button>
+
+    <button onclick="mostrarRegistro()">Listar Asistencia</button>
     
     
 
@@ -60,8 +56,6 @@
             // Llamo al magico
             let body = {
                 email: email.value,
-                name: name.value,
-                surname:surname.value,
                 action: action
             }
 
