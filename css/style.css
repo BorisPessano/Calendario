@@ -7,3 +7,11 @@
 .nav-item{
     color: #000 !important
 }
+
+input {
+    height: 32px;
+}
+
+h1 {
+    color: #5c24e4;
+}
