@@ -16,16 +16,19 @@
 
     <h1>Registro de Asistencia</h1>
     <div style="display: inline-block;">
+        <label>Email:</label>
+        <input type="email" id="email" name="email">
+
         <label>Nombre:</label>
         <input type="text" id="name" name="name">
     
         <label>Apellido:</label>
         <input type="text" id="lastname" name="lastname">
     
-        <input type="radio" id="Presencial" name="Presencial" value="true">
+        <input type="checkbox" id="Presencial" name="Presencial" value=1>
         <label for="Presencial">Presencial:</label>
     
-        <input type="radio" id="Remote" name="Remote" value="true">
+        <input type="checkbox" id="Remote" name="Remote" value=2>
         <label for="Remote">Remoto:</label>
     </div>
     
@@ -39,31 +42,79 @@
     <script>
         function marcarAsistencia() {
             var fecha = new Date();
-            var registro = localStorage.getItem('registro') || '[]';
-            var name = localStorage.getElementById('name');
-            var lastName = localStorage.getElementById('lastname');
-            var presencial = localStorage.getElementById('Presencial');
-            var remote = localStorage.getElementById('Remote');
             
-            // Llamo al magico
+            var email = document.getElementById('email');
+            var name = document.getElementById('name');
+            var surname = document.getElementById('lastname');
+            var presencial = document.getElementById('Presencial');
+            var remoto = document.getElementById('Remote');
+            let action = 0
+            if (presencial === 1){
+                action = 1
+            } else {
+                action = 2
+            }
 
-            mostrarRegistro();
+             
+            // Llamo al magico
+            let body = {
+                emai: email.value,
+                name: name.value,
+                surname:surname.value,
+                action: action
+            }
+
+            console.log('ElBody: ',body)
+
+            fetch('http://localhost:6001/api/clevendario/action',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify(body)
+
+            }).then(response => response.json())
+            .then(responseData => {
+                mostrarRegistro();
+            })
+            .catch(error => {
+                console.error('Error al llamar al servicio:', error);
+            });;
+
+            
         }
 
         function mostrarRegistro() {
-            var registro = localStorage.getItem('registro') || '[]';
+            var registro = document.getItem('registro') || '[]';
+            var registroHTML = "";
             registro = JSON.parse(registro);
 
-            var registroHTML = '<h2>Registro de Asistencia</h2>';
-            if (registro.length > 0) {
-                registroHTML += '<ul>';
-                registro.forEach(function (entrada) {
-                    registroHTML += '<li>' + entrada.fecha + '</li>';
-                });
-                registroHTML += '</ul>';
-            } else {
-                registroHTML += '<p>No hay registros de asistencia.</p>';
-            }
+            fetch('http://localhost:6001/api/clevendario/health',{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                }
+
+            }).then(response => response.json())
+            .then(responseData => {
+                 registroHTML = '<h2>Registro de Asistencia</h2>';
+                if (responseData.length > 0) {
+                    registroHTML += '<ul>';
+                    responseData.forEach(function (entrada) {
+                        registroHTML += '<li>' + entrada.fecha + '</li>';
+                    });
+                    registroHTML += '</ul>';
+                } else {
+                    registroHTML += '<p>No hay registros de asistencia.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error al llamar al servicio:', error);
+            });;
+
+            
 
             document.getElementById('registro').innerHTML = registroHTML;
         }
