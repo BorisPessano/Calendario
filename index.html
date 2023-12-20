@@ -37,12 +37,8 @@
     <div class="col-md-6">
       <form>
         <div class="form-group">
-          <label for="nombre">Nombre:</label>
-          <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre">
-        </div>
-        <div class="form-group">
-          <label for="apellido">Apellido:</label>
-          <input type="text" class="form-control" id="apellido" placeholder="Ingrese su apellido">
+          <label for="email">Email:</label>
+          <input type="text" class="form-control" id="email" placeholder="Ingrese su Email">
         </div>
         <div class="form-group">
           <label>Tipo de Asistencia:</label>
@@ -56,7 +52,11 @@
           </div>
         </div>
         <button type="submit" class="btn btn-primary">Enviar</button>
+
       </form>
+
+      <Button type="button" class="btn btn-default" onclick="mostrarRegistro()">Listar Asistencias </Button>
+      <div id="registro"></div>
     </div>
   </div>
 </div>
