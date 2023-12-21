@@ -1,13 +1,9 @@
 var calendar;
 
 function marcarAsistencia() {
-    var fecha = new Date();
     
     var email = document.getElementById('email');
-    var name = document.getElementById('name');
-    var surname = document.getElementById('lastname');
-    var presencial = document.getElementById('Presencial');
-    var remoto = document.getElementById('Remote');
+    var presencial = document.getElementById('presencial');
     let action = 0
     if (presencial.value == 1){
         action = 1
@@ -15,7 +11,6 @@ function marcarAsistencia() {
         action = 2
     }
 
-    // Llamo al magico
     let body = {
         email: email.value,
         action: action
@@ -35,13 +30,12 @@ function marcarAsistencia() {
     })
     .catch(error => {
         console.error('Error al llamar al servicio:', error);
-    });;
+    });
     mostrarRegistro();
 }
 
 function mostrarRegistro() {
     var registro = document.getElementById('registro') || '[]';
-    var registroHTML = "";
     var email = document.getElementById('email');
     registro = registro.value;
     if (email.value != ''){
@@ -56,13 +50,14 @@ function mostrarRegistro() {
     .then(responseData => {
         if (responseData.length > 0) {
             responseData.forEach(function (entrada) {
+                var date = new Date(entrada.createdAt);
                 console.log(entrada);
-                if (entrada.createdAt.getMonth() === Date.now().getMonth() && entrada.createdAt.getYear() === Date.now().getYear()) {
+                if (date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear()) {
                     calendar.addEvent({
-                        id: entrada.createdAt.toString(),
+                        id: entrada.createdAt,
                         title: 'Feriado',
-                        start: entrada.createdAt,
-                        backgroundColor: "blue"
+                        start: date,
+                        backgroundColor: "red"
                     });
                 }
             });
@@ -78,8 +73,6 @@ function mostrarRegistro() {
 
 // Mostrar el registro al cargar la página
 mostrarRegistro();
-
-//fetchear feriados y actions y crear eventos
 
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
