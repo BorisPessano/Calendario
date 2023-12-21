@@ -4,13 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Asistencia</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/user.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
@@ -35,19 +30,9 @@
 
     <button onclick="Registrarse()">Registrarse</button>
     
-
-    <script>
-        function Registrarse() {
-            var fecha = new Date();
-            var name = localStorage.getElementById('Name');
-            var surname = localStorage.getElementById('Surname');
-            var email = localStorage.getElementById('Email');
-            var pass = localStorage.getElementById('Password');
-            
-            // Llamo al magico
-            
-        }
-    </script>
-
+    <script src="js/user.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
