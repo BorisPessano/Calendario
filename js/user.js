@@ -18,7 +18,7 @@ function Registrarse() {
         role,
     }
     mostrarSpinner();
-    fetch('http://localhost:6001/api/clevendario/user/',{
+    fetch('https://clevendario-api.fly.dev/api/clevendario/user/',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

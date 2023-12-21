@@ -11,7 +11,7 @@ function Login() {
     }
     mostrarSpinner()
 
-    fetch('http://localhost:6001/api/clevendario/user/login',{
+    fetch('https://clevendario-api.fly.dev/api/clevendario/user/login',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

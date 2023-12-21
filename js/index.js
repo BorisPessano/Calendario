@@ -42,7 +42,7 @@ function marcarAsistencia() {
         action: action
     }
     mostrarSpinner()
-    fetch('http://localhost:6001/api/clevendario/action',{
+    fetch('https://clevendario-api.fly.dev/api/clevendario/action',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ function mostrarRegistro() {
     registro = registro.value;
     mostrarSpinner()
     if (email.value != ''){
-        fetch(`http://localhost:6001/api/clevendario/action/getByEmail?email=${email.value}`,{
+        fetch(`https://clevendario-api.fly.dev/api/clevendario/action/getByEmail?email=${email.value}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
