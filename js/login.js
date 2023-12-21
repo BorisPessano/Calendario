@@ -25,10 +25,7 @@ function Login() {
     .catch(error => {
         console.error('Error al llamar al servicio:', error);
     });
-    
-    
-    
-    
+        
 }
 
 function establecerCookie(nombre, valor, expiracion) {
@@ -44,3 +41,7 @@ function establecerCookie(nombre, valor, expiracion) {
 
     document.cookie = `${nombre}=${valor}; ${Object.entries(opciones).map(([key, value]) => `${key}=${value}`).join('; ')}`;
   }
+
+function register() {
+    window.location.href = 'user.html';
+}
