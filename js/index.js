@@ -3,7 +3,8 @@ var calendar;
 const token = obtenerCookie('token');
 
 if (token) {
-
+    let decode = jwt_decode(token)
+    console.log(decode)
   } else {
 
     window.location.href = "login.html"
@@ -15,8 +16,8 @@ function marcarAsistencia() {
     var email = document.getElementById('email');
     var name = document.getElementById('name');
     var surname = document.getElementById('lastname');
-    var presencial = document.getElementById('Presencial');
-    var remoto = document.getElementById('Remote');
+    var presencial = document.getElementById('presencial');
+    var remoto = document.getElementById('remote');
     let action = 0
     if (presencial.value == 1){
         action = 1
