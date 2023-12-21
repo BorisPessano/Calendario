@@ -1,3 +1,5 @@
+var calendar;
+
 function marcarAsistencia() {
     var fecha = new Date();
     
@@ -52,18 +54,19 @@ function mostrarRegistro() {
 
     }).then(response => response.json())
     .then(responseData => {
-         registroHTML = '<h2>Registro de Asistencia</h2>';
         if (responseData.length > 0) {
-            registroHTML += '<ul>';
             responseData.forEach(function (entrada) {
-                registroHTML += '<li>' + entrada.createdAt + '</li>';
+                console.log(entrada);
+                if (entrada.createdAt.getMonth() === Date.now().getMonth() && entrada.createdAt.getYear() === Date.now().getYear()) {
+                    calendar.addEvent({
+                        id: entrada.createdAt.toString(),
+                        title: 'Feriado',
+                        start: entrada.createdAt,
+                        backgroundColor: "blue"
+                    });
+                }
             });
-            registroHTML += '</ul>';
-        } else {
-            registroHTML += '<p>No hay registros de asistencia.</p>';
         }
-
-        document.getElementById('registro').innerHTML = registroHTML;
     })
     .catch(error => {
         console.error('Error al llamar al servicio:', error);
@@ -75,3 +78,21 @@ function mostrarRegistro() {
 
 // Mostrar el registro al cargar la página
 mostrarRegistro();
+
+//fetchear feriados y actions y crear eventos
+
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale: "ES",
+      firstDay: 1,
+      eventClick: function(info) {
+        info.jsEvent.preventDefault(); // don't let the browser navigate
+        //redirect a pagina de edicion de actions
+        console.log(info.event.id);
+      }
+    });
+    calendar.render();
+    mostrarRegistro();
+  });

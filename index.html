@@ -14,64 +14,6 @@
   <!-- Incluye los archivos de Bootstrap (puedes usar la versión que prefieras) -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
-
-  <script>
-
-    //fetchear feriados y actions y crear eventos
-
-    document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        locale: "ES",
-        firstDay: 1,
-        eventClick: function(info) {
-          info.jsEvent.preventDefault(); // don't let the browser navigate
-          //redirect a pagina de edicion de actions
-          console.log(info.event.id);
-        }
-      });
-      //modificar para procesar eventos fetcheados
-      calendar.addEvent({
-        id: 'a',
-        title: 'Feriado',
-        start: '2023-12-25',
-        backgroundColor: "blue"
-      });
-      calendar.addEvent({
-        id: 'b',
-        title: 'Presencial',
-        start: '2023-12-18',
-        backgroundColor: "green"
-      });
-      calendar.addEvent({
-        id: 'c',
-        title: 'Presencial',
-        start: '2023-12-19',
-        backgroundColor: "green"
-      });
-      calendar.addEvent({
-        id: 'd',
-        title: 'Presencial',
-        start: '2023-12-20',
-        backgroundColor: "green"
-      });
-      calendar.addEvent({
-        id: 'e',
-        title: 'Presencial',
-        start: '2023-12-21',
-        backgroundColor: "green"
-      });
-      calendar.addEvent({
-        id: 'f',
-        title: 'Remoto',
-        start: '2023-12-22',
-        backgroundColor: "red"
-      });
-      calendar.render();
-    });
-
-  </script>
 </head>
 
 <body>
