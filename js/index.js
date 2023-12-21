@@ -1,5 +1,14 @@
 var calendar;
 
+const token = obtenerCookie('token');
+
+if (token) {
+
+  } else {
+
+    window.location.href = "login.html"
+  }
+
 function marcarAsistencia() {
     var fecha = new Date();
     
@@ -96,3 +105,14 @@ document.addEventListener('DOMContentLoaded', function() {
     calendar.render();
     mostrarRegistro();
   });
+
+  function obtenerCookie(nombre) {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [cookieNombre, cookieValor] = cookie.trim().split('=');
+      if (cookieNombre === nombre) {
+        return cookieValor;
+      }
+    }
+    return null;
+  }
