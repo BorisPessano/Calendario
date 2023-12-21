@@ -33,3 +33,8 @@ function Registrarse() {
     // Llamo al magico
     
 }
+
+function onBack() {
+    window.location.href = 'login.html';
+
+}
