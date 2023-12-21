@@ -13,6 +13,15 @@ var holidays = [
     { date: "2024-12-25", description: "Navidad" },
     { date: "2023-12-25", description: "Navidad" },
 ];
+const token = obtenerCookie('token');
+
+if (token) {
+    let decode = jwt_decode(token)
+    console.log(decode)
+  } else {
+
+    window.location.href = "login.html"
+  }
 
 function marcarAsistencia() {
     
@@ -134,3 +143,14 @@ document.addEventListener('DOMContentLoaded', function() {
     mostrarFeriados();
     mostrarRegistro();
   });
+
+  function obtenerCookie(nombre) {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [cookieNombre, cookieValor] = cookie.trim().split('=');
+      if (cookieNombre === nombre) {
+        return cookieValor;
+      }
+    }
+    return null;
+  }
