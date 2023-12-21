@@ -69,10 +69,7 @@ function calculateRemainingDays(presentDays) {
     const presentDaysCount = presentDays.length;
     const presentPercentage = (presentDaysCount / workDays) * 100;
 
-    if (presentPercentage < 60) {
-        const remainingDays = Math.ceil((0.6 * workDays) - presentDaysCount);
-        alert(`Te faltan ${remainingDays} días más de asistencia a la oficina`);
-    }
+    return remainingDays = Math.ceil((0.6 * workDays) - presentDaysCount);
 }
 
 function calculateWeekends(year, month) {
@@ -97,7 +94,16 @@ function mostrarFeriados() {
     })
 }
 
+function clearEvents() {
+    var listEvent = calendar.getEvents();
+    listEvent.forEach(event => { 
+        event.remove()
+    });
+}
+
 function mostrarRegistro() {
+    clearEvents();
+    mostrarFeriados();
     var registro = document.getElementById('registro') || '[]';
     var email = document.getElementById('email');
     registro = registro.value;
@@ -115,7 +121,7 @@ function mostrarRegistro() {
             var date = new Date(val.createdAt);
             return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
         });
-        calculateRemainingDays(filteredData);
+        document.getElementById("remaining-days").innerText = calculateRemainingDays(filteredData);
         filteredData.forEach(function (entrada) {
             var date = new Date(entrada.createdAt);
             calendar.addEvent({
@@ -134,8 +140,6 @@ function mostrarRegistro() {
     }
 }
 
-// Mostrar el registro al cargar la página
-mostrarRegistro();
 
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
@@ -150,7 +154,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     calendar.render();
-    mostrarFeriados();
     mostrarRegistro();
   });
 
