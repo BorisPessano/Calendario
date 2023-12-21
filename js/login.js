@@ -19,9 +19,13 @@ function Login() {
 
     }).then(response => response.json())
     .then(responseData => {
-        establecerCookie('token',responseData.access_token,3600);
-        establecerCookie('email',responseData.user.email,3600);
-        window.location.href = 'index.html';
+        if(responseData.access_token){
+            establecerCookie('token',responseData.access_token,3600);
+            establecerCookie('email',responseData.user.email,3600);
+            window.location.href = 'index.html';
+        } else{
+            alert("Usuario y/o contraseña incorrectos")
+        }
     })
     .catch(error => {
         console.error('Error al llamar al servicio:', error);
