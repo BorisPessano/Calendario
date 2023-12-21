@@ -1,3 +1,5 @@
+ocultarSpinner();
+
 function Login() {
    
     var email = document.getElementById('Email');
@@ -7,8 +9,8 @@ function Login() {
         email: email.value,
         password: pass.value
     }
-    
-    // Llamo al magico
+    mostrarSpinner()
+
     fetch('http://localhost:6001/api/clevendario/user/login',{
         method: 'POST',
         headers: {
@@ -26,8 +28,11 @@ function Login() {
         } else{
             alert("Usuario y/o contraseña incorrectos")
         }
+ocultarSpinner();
+
     })
     .catch(error => {
+ocultarSpinner();
         console.error('Error al llamar al servicio:', error);
     });
         
@@ -50,3 +55,13 @@ function establecerCookie(nombre, valor, expiracion) {
 function register() {
     window.location.href = 'user.html';
 }
+
+function mostrarSpinner() {
+    var spinner = document.getElementById("spinner");
+    spinner.style.display = "block";
+  }
+  
+  function ocultarSpinner() {
+    var spinner = document.getElementById("spinner");
+    spinner.style.display = "none";
+  }

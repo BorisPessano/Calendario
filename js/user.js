@@ -1,3 +1,5 @@
+ocultarSpinner();
+
 function Registrarse() {
     var fecha = new Date();
     var name = document.getElementById('Name').value;
@@ -5,6 +7,7 @@ function Registrarse() {
     var email = document.getElementById('Email').value;
     var password = document.getElementById('Password').value;
     var phone = document.getElementById('Phone').value;
+    var role = document.getElementById('slcRole').value === "dev" ? 1 : 2;
     
     var body = {
         name,
@@ -12,8 +15,9 @@ function Registrarse() {
         email,
         password,
         phone,
+        role,
     }
-
+    mostrarSpinner();
     fetch('http://localhost:6001/api/clevendario/user/',{
         method: 'POST',
         headers: {
@@ -24,17 +28,29 @@ function Registrarse() {
 
     }).then(response => response.json())
     .then(responseData => {
-        alert("Usuario creado");
+        if(!responseData.message){
+            alert("Usuario creado");
+        }else{
+            alert("Este correo ya esta registrado")
+        }
+        ocultarSpinner();
     })
     .catch(error => {
         console.error('Error al llamar al servicio:', error);
+        ocultarSpinner();
     });
-
-    // Llamo al magico
-    
 }
 
 function onBack() {
     window.location.href = 'login.html';
-
 }
+
+function mostrarSpinner() {
+    var spinner = document.getElementById("spinner");
+    spinner.style.display = "block";
+  }
+  
+  function ocultarSpinner() {
+    var spinner = document.getElementById("spinner");
+    spinner.style.display = "none";
+  }

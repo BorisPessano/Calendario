@@ -24,6 +24,8 @@ if (token) {
     window.location.href = "login.html"
 }
 
+ocultarSpinner();
+
 function marcarAsistencia() {
     
     var email = document.getElementById('email');
@@ -39,7 +41,7 @@ function marcarAsistencia() {
         email: email.value,
         action: action
     }
-
+    mostrarSpinner()
     fetch('http://localhost:6001/api/clevendario/action',{
         method: 'POST',
         headers: {
@@ -56,8 +58,10 @@ function marcarAsistencia() {
             alert("Ya existe un registro para este dia")
             actualizarRegistro();
         }
+        ocultarSpinner();
     })
     .catch(error => {
+        ocultarSpinner();
         console.error('Error al llamar al servicio:', error);
     });
     mostrarRegistro();
@@ -112,6 +116,7 @@ function mostrarRegistro() {
     var registro = document.getElementById('registro') || '[]';
     var email = document.getElementById('email');
     registro = registro.value;
+    mostrarSpinner()
     if (email.value != ''){
         fetch(`http://localhost:6001/api/clevendario/action/getByEmail?email=${email.value}`,{
         method: 'GET',
@@ -125,6 +130,7 @@ function mostrarRegistro() {
         var filteredData = responseData.filter(val => {
             var date = new Date(val.createdAt);
             return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
+            ocultarSpinner();
         });
         document.getElementById("remaining-days").innerText = calculateRemainingDays(filteredData);
         filteredData.forEach(function (entrada) {
@@ -138,6 +144,7 @@ function mostrarRegistro() {
         });
     })
     .catch(error => {
+        ocultarSpinner();
         console.error('Error al llamar al servicio:', error);
     });
 
@@ -193,3 +200,17 @@ function actualizarRegistro(){
         console.log('no pasa nada');
     }   
 }
+
+function mostrarSpinner() {
+    var spinner = document.getElementById("spinner");
+    spinner.style.display = "block";
+    var spinner2 = document.getElementById("spinner2");
+    spinner2.style.display = "block";
+  }
+  
+  function ocultarSpinner() {
+    var spinner = document.getElementById("spinner");
+    spinner.style.display = "none";
+    var spinner2 = document.getElementById("spinner2");
+    spinner2.style.display = "none";
+  }

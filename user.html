@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Asistencia</title>
     <link rel="stylesheet" href="css/user.css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+
 <body>
 
     <div class="d-flex justify-content-center">
@@ -17,22 +19,28 @@
         <div class="card text-center mx-auto" style="width: 500px;">
             <div class="card-body form-group">
                 <h1>Registrar Usuario</h1>
-                
+
                 <label>Nombre</label><br>
                 <input type="text" id="Name" id="Name" class="form-control"><br>
-            
+
                 <label>Apellido</label><br>
                 <input type="text" id="Surname" id="Surname" class="form-control"><br>
-                
+
+                <label>Rol</label><br>
+                <select id="slcRole" class="form-control mb-4">
+                    <option value="dev">Desarrollador</option>
+                    <option value="admin">Administrador</option>
+                </select>
+
                 <label>Correo</label><br>
                 <input type="email" id="Email" id="Email" class="form-control"><br>
-                
+
                 <label>Contraseña</label><br>
                 <input type="password" id="Password" id="Password" class="form-control"><br>
-        
+
                 <label>Telefono</label><br>
                 <input type="text" id="Phone" id="Phone" class="form-control"><br>
-    
+
                 <div class="row d-flex justify-content-center">
                     <button type="submit" class="btn btn-primary mt-3 mb-3" onclick="Registrarse()">Registrarse</button>
                 </div>
@@ -40,13 +48,18 @@
                 <div class="row d-flex justify-content-center">
                     <button type="button" class="btn btn-success" onclick="onBack()">Inicio</button>
                 </div>
+
+                <div class="spinner-border text-primary text-center mx-auto" role="status" id="spinner">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
         </div>
     </div>
-    
+<!-- "manup@mail.com -->
     <script src="js/user.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
