@@ -29,12 +29,12 @@ function marcarAsistencia() {
     var email = document.getElementById('email');
     var presencial = document.getElementById('presencial');
     let action = 0
-    if (presencial.value == 1){
+    if (presencial.value == 'presencial'){
         action = 1
     } else {
         action = 2
     }
-
+    console.log('Accion: ', action)
     let body = {
         email: email.value,
         action: action
