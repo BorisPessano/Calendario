@@ -50,7 +50,12 @@ function marcarAsistencia() {
 
     }).then(response => response.json())
     .then(responseData => {
-        mostrarRegistro();
+        if(!responseData.message){
+            mostrarRegistro();
+        }else{
+            alert("Ya existe un registro para este dia")
+            actualizarRegistro();
+        }
     })
     .catch(error => {
         console.error('Error al llamar al servicio:', error);
@@ -177,4 +182,14 @@ document.addEventListener('DOMContentLoaded', function() {
         var nombre = igualPos > -1 ? cookie.substr(0, igualPos) : cookie;
         document.cookie = nombre + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
     }
+}
+
+function actualizarRegistro(){
+    let modificar = confirm("Desea actualizar el registro existente con esta nueva informacion");
+
+    if(modificar){
+        console.log('llamar servicio de update');
+    }else {
+        console.log('no pasa nada');
+    }   
 }
