@@ -24,8 +24,8 @@ function Login() {
     .catch(error => {
         console.error('Error al llamar al servicio:', error);
     });
-    
-    
-    
-    
+}
+
+function register() {
+    window.location.href = 'user.html';
 }
