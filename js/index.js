@@ -3,8 +3,9 @@ var calendar;
 const token = obtenerCookie('token');
 
 if (token) {
-    let decode = jwt_decode(token)
-    console.log(decode)
+    let email = obtenerCookie('email') 
+    let emailCampo =  document.getElementById('email');
+    emailCampo.value = email;
   } else {
 
     window.location.href = "login.html"

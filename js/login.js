@@ -20,6 +20,7 @@ function Login() {
     }).then(response => response.json())
     .then(responseData => {
         establecerCookie('token',responseData.access_token,3600);
+        establecerCookie('email',responseData.user.email,3600);
         window.location.href = 'index.html';
     })
     .catch(error => {
