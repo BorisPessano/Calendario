@@ -15,3 +15,6 @@ input {
 h1 {
     color: #5c24e4;
 }
+.fc-toolbar-chunk:nth-child(3) {
+    display: none;
+}
