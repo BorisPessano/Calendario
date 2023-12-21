@@ -13,16 +13,16 @@ var holidays = [
     { date: "2024-12-25", description: "Navidad" },
     { date: "2023-12-25", description: "Navidad" },
 ];
+
 const token = obtenerCookie('token');
 
 if (token) {
     let email = obtenerCookie('email') 
     let emailCampo =  document.getElementById('email');
     emailCampo.value = email;
-  } else {
-
+} else {
     window.location.href = "login.html"
-  }
+}
 
 function marcarAsistencia() {
     
@@ -63,7 +63,9 @@ function calculateRemainingDays(presentDays) {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     const lastDay = new Date(year, month + 1, 0);
-    const workDays = lastDay.getDate();
+    const totalDays = lastDay.getDate();
+    const weekends = calculateWeekends(year, month);
+    const workDays = totalDays - weekends;
     const presentDaysCount = presentDays.length;
     const presentPercentage = (presentDaysCount / workDays) * 100;
 
@@ -71,6 +73,13 @@ function calculateRemainingDays(presentDays) {
         const remainingDays = Math.ceil((0.6 * workDays) - presentDaysCount);
         alert(`Te faltan ${remainingDays} días más de asistencia a la oficina`);
     }
+}
+
+function calculateWeekends(year, month) {
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const weekends = Math.floor((lastDay.getDate() + firstDay.getDay()) / 7) * 2;
+    return weekends;
 }
 
 function mostrarFeriados() {
