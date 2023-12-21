@@ -1,24 +1,33 @@
 var calendar;
 
+var holidays = [
+    { date: "2024-01-01", description: "Año Nuevo" },
+    { date: "2024-02-12", description: "Carnaval" },
+    { date: "2024-02-13", description: "Carnaval" },
+    { date: "2024-03-28", description: "Semana de turismo" },
+    { date: "2024-03-29", description: "Semana de turismo" },
+    { date: "2024-04-22", description: "Desembarco de los 33. Feriado corrido de fecha" },
+    { date: "2024-05-01", description: "Día de los trabajadores" },
+    { date: "2024-06-19", description: "Natalicio de Artigas" },
+    { date: "2024-07-18", description: "Jura de la Constitución" },
+    { date: "2024-12-25", description: "Navidad" },
+    { date: "2023-12-25", description: "Navidad" },
+];
+
 const token = obtenerCookie('token');
 
 if (token) {
     let email = obtenerCookie('email') 
     let emailCampo =  document.getElementById('email');
     emailCampo.value = email;
-  } else {
-
+} else {
     window.location.href = "login.html"
-  }
+}
 
 function marcarAsistencia() {
-    var fecha = new Date();
     
     var email = document.getElementById('email');
-    var name = document.getElementById('name');
-    var surname = document.getElementById('lastname');
     var presencial = document.getElementById('presencial');
-    var remoto = document.getElementById('remote');
     let action = 0
     if (presencial.value == 1){
         action = 1
@@ -26,7 +35,6 @@ function marcarAsistencia() {
         action = 2
     }
 
-    // Llamo al magico
     let body = {
         email: email.value,
         action: action
@@ -46,13 +54,51 @@ function marcarAsistencia() {
     })
     .catch(error => {
         console.error('Error al llamar al servicio:', error);
-    });;
+    });
     mostrarRegistro();
+}
+
+function calculateRemainingDays(presentDays) {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const lastDay = new Date(year, month + 1, 0);
+    const totalDays = lastDay.getDate();
+    const weekends = calculateWeekends(year, month);
+    const workDays = totalDays - weekends;
+    const presentDaysCount = presentDays.length;
+    const presentPercentage = (presentDaysCount / workDays) * 100;
+
+    if (presentPercentage < 60) {
+        const remainingDays = Math.ceil((0.6 * workDays) - presentDaysCount);
+        alert(`Te faltan ${remainingDays} días más de asistencia a la oficina`);
+    }
+}
+
+function calculateWeekends(year, month) {
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const weekends = Math.floor((lastDay.getDate() + firstDay.getDay()) / 7) * 2;
+    return weekends;
+}
+
+function mostrarFeriados() {
+    holidays.filter(val => {
+        var date = new Date(val.date);
+        return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
+    }).forEach(val => {
+        var date = new Date(val.date);
+        calendar.addEvent({
+            id: date,
+            title: "Feriado",
+            start: date.toISOString().split('T')[0],
+            backgroundColor: "blue"
+        });
+    })
 }
 
 function mostrarRegistro() {
     var registro = document.getElementById('registro') || '[]';
-    var registroHTML = "";
     var email = document.getElementById('email');
     registro = registro.value;
     if (email.value != ''){
@@ -65,18 +111,20 @@ function mostrarRegistro() {
 
     }).then(response => response.json())
     .then(responseData => {
-        if (responseData.length > 0) {
-            responseData.forEach(function (entrada) {
-                if (entrada.createdAt.getMonth() === Date.now().getMonth() && entrada.createdAt.getYear() === Date.now().getYear()) {
-                    calendar.addEvent({
-                        id: entrada.createdAt.toString(),
-                        title: 'Feriado',
-                        start: entrada.createdAt,
-                        backgroundColor: "blue"
-                    });
-                }
+        var filteredData = responseData.filter(val => {
+            var date = new Date(val.createdAt);
+            return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
+        });
+        calculateRemainingDays(filteredData);
+        filteredData.forEach(function (entrada) {
+            var date = new Date(entrada.createdAt);
+            calendar.addEvent({
+                id: entrada.createdAt,
+                title: entrada.action.name === "REMOTE" ? "Remoto" : "Presencial",
+                start: date.toISOString().split('T')[0],
+                backgroundColor: entrada.action.name === "REMOTE" ? "red" : "green"
             });
-        }
+        });
     })
     .catch(error => {
         console.error('Error al llamar al servicio:', error);
@@ -88,8 +136,6 @@ function mostrarRegistro() {
 
 // Mostrar el registro al cargar la página
 mostrarRegistro();
-
-//fetchear feriados y actions y crear eventos
 
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
@@ -104,6 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     calendar.render();
+    mostrarFeriados();
     mostrarRegistro();
   });
 
