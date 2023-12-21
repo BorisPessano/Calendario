@@ -13,23 +13,13 @@ var holidays = [
     { date: "2024-12-25", description: "Navidad" },
     { date: "2023-12-25", description: "Navidad" },
 ];
-const token = obtenerCookie('token');
-
-if (token) {
-    let email = obtenerCookie('email') 
-    let emailCampo =  document.getElementById('email');
-    emailCampo.value = email;
-  } else {
-
-    window.location.href = "login.html"
-  }
 
 function marcarAsistencia() {
-    
+
     var email = document.getElementById('email');
     var presencial = document.getElementById('presencial');
     let action = 0
-    if (presencial.value == 1){
+    if (presencial.value == 1) {
         action = 1
     } else {
         action = 2
@@ -40,7 +30,7 @@ function marcarAsistencia() {
         action: action
     }
 
-    fetch('http://localhost:6001/api/clevendario/action',{
+    fetch('http://localhost:6001/api/clevendario/action', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -49,12 +39,12 @@ function marcarAsistencia() {
         body: JSON.stringify(body)
 
     }).then(response => response.json())
-    .then(responseData => {
-        mostrarRegistro();
-    })
-    .catch(error => {
-        console.error('Error al llamar al servicio:', error);
-    });
+        .then(responseData => {
+            mostrarRegistro();
+        })
+        .catch(error => {
+            console.error('Error al llamar al servicio:', error);
+        });
     mostrarRegistro();
 }
 
@@ -63,7 +53,9 @@ function calculateRemainingDays(presentDays) {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     const lastDay = new Date(year, month + 1, 0);
-    const workDays = lastDay.getDate();
+    const totalDays = lastDay.getDate();
+    const weekends = calculateWeekends(year, month);
+    const workDays = totalDays - weekends;
     const presentDaysCount = presentDays.length;
     const presentPercentage = (presentDaysCount / workDays) * 100;
 
@@ -71,6 +63,13 @@ function calculateRemainingDays(presentDays) {
         const remainingDays = Math.ceil((0.6 * workDays) - presentDaysCount);
         alert(`Te faltan ${remainingDays} días más de asistencia a la oficina`);
     }
+}
+
+function calculateWeekends(year, month) {
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const weekends = Math.floor((lastDay.getDate() + firstDay.getDay()) / 7) * 2;
+    return weekends;
 }
 
 function mostrarFeriados() {
@@ -92,66 +91,55 @@ function mostrarRegistro() {
     var registro = document.getElementById('registro') || '[]';
     var email = document.getElementById('email');
     registro = registro.value;
-    if (email.value != ''){
-        fetch(`http://localhost:6001/api/clevendario/action/getByEmail?email=${email.value}`,{
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-        }
+    if (email.value != '') {
+        fetch(`http://localhost:6001/api/clevendario/action/getByEmail?email=${email.value}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
 
-    }).then(response => response.json())
-    .then(responseData => {
-        var filteredData = responseData.filter(val => {
-            var date = new Date(val.createdAt);
-            return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
-        });
-        calculateRemainingDays(filteredData);
-        filteredData.forEach(function (entrada) {
-            var date = new Date(entrada.createdAt);
-            calendar.addEvent({
-                id: entrada.createdAt,
-                title: entrada.action.name === "REMOTE" ? "Remoto" : "Presencial",
-                start: date.toISOString().split('T')[0],
-                backgroundColor: entrada.action.name === "REMOTE" ? "red" : "green"
+        }).then(response => response.json())
+            .then(responseData => {
+                var filteredData = responseData.filter(val => {
+                    var date = new Date(val.createdAt);
+                    return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
+                });
+                calculateRemainingDays(filteredData);
+                filteredData.forEach(function (entrada) {
+                    var date = new Date(entrada.createdAt);
+                    calendar.addEvent({
+                        id: entrada.createdAt,
+                        title: entrada.action.name === "REMOTE" ? "Remoto" : "Presencial",
+                        start: date.toISOString().split('T')[0],
+                        backgroundColor: entrada.action.name === "REMOTE" ? "red" : "green"
+                    });
+                });
+            })
+            .catch(error => {
+                console.error('Error al llamar al servicio:', error);
             });
-        });
-    })
-    .catch(error => {
-        console.error('Error al llamar al servicio:', error);
-    });
 
-    
+
     }
 }
 
 // Mostrar el registro al cargar la página
 mostrarRegistro();
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      locale: "ES",
-      firstDay: 1,
-      eventClick: function(info) {
-        info.jsEvent.preventDefault(); // don't let the browser navigate
-        //redirect a pagina de edicion de actions
-        console.log(info.event.id);
-      }
+        initialView: 'dayGridMonth',
+        locale: "ES",
+        firstDay: 1,
+        eventClick: function (info) {
+            info.jsEvent.preventDefault(); // don't let the browser navigate
+            //redirect a pagina de edicion de actions
+            console.log(info.event.id);
+        }
     });
     calendar.render();
     mostrarFeriados();
     mostrarRegistro();
-  });
-
-  function obtenerCookie(nombre) {
-    const cookies = document.cookie.split(';');
-    for (const cookie of cookies) {
-      const [cookieNombre, cookieValor] = cookie.trim().split('=');
-      if (cookieNombre === nombre) {
-        return cookieValor;
-      }
-    }
-    return null;
-  }
+});
