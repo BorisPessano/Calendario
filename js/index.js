@@ -67,7 +67,6 @@ function mostrarRegistro() {
     .then(responseData => {
         if (responseData.length > 0) {
             responseData.forEach(function (entrada) {
-                console.log(entrada);
                 if (entrada.createdAt.getMonth() === Date.now().getMonth() && entrada.createdAt.getYear() === Date.now().getYear()) {
                     calendar.addEvent({
                         id: entrada.createdAt.toString(),
