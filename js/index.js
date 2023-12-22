@@ -17,8 +17,8 @@ var holidays = [
 const token = obtenerCookie('token');
 
 if (token) {
-    let email = obtenerCookie('email') 
-    let emailCampo =  document.getElementById('email');
+    let email = obtenerCookie('email')
+    let emailCampo = document.getElementById('email');
     emailCampo.value = email;
 } else {
     window.location.href = "login.html"
@@ -27,11 +27,11 @@ if (token) {
 ocultarSpinner();
 
 function marcarAsistencia() {
-    
+
     var email = document.getElementById('email');
     var presencial = document.getElementById('presencial');
     let action = 0
-    if (presencial.checked == true){
+    if (presencial.checked == true) {
         action = 1
     } else {
         action = 2
@@ -41,7 +41,7 @@ function marcarAsistencia() {
         action: action
     }
     mostrarSpinner()
-    fetch('https://clevendario-api.fly.dev/api/clevendario/action',{
+    fetch('https://clevendario-api.fly.dev/api/clevendario/action', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -50,19 +50,19 @@ function marcarAsistencia() {
         body: JSON.stringify(body)
 
     }).then(response => response.json())
-    .then(responseData => {
-        if(!responseData.message){
-            mostrarRegistro();
-        }else{
-            alert("Ya existe un registro para este dia")
-            actualizarRegistro();
-        }
-        ocultarSpinner();
-    })
-    .catch(error => {
-        ocultarSpinner();
-        console.error('Error al llamar al servicio:', error);
-    });
+        .then(responseData => {
+            if (!responseData.message) {
+                mostrarRegistro();
+            } else {
+                alert("Ya existe un registro para este dia")
+                actualizarRegistro();
+            }
+            ocultarSpinner();
+        })
+        .catch(error => {
+            ocultarSpinner();
+            console.error('Error al llamar al servicio:', error);
+        });
     mostrarRegistro();
 }
 
@@ -104,7 +104,7 @@ function mostrarFeriados() {
 
 function clearEvents() {
     var listEvent = calendar.getEvents();
-    listEvent.forEach(event => { 
+    listEvent.forEach(event => {
         event.remove()
     });
 }
@@ -116,70 +116,70 @@ function mostrarRegistro() {
     var email = document.getElementById('email');
     registro = registro.value;
     mostrarSpinner()
-    if (email.value != ''){
-        fetch(`https://clevendario-api.fly.dev/api/clevendario/action/getByEmail?email=${email.value}`,{
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-        }
+    if (email.value != '') {
+        fetch(`https://clevendario-api.fly.dev/api/clevendario/action/getByEmail?email=${email.value}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
 
-    }).then(response => response.json())
-    .then(responseData => {
-        var filteredData = responseData.filter(val => {
-            var date = new Date(val.createdAt);
-            return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
-            ocultarSpinner();
-        });
-        document.getElementById("remaining-days").innerText = calculateRemainingDays(filteredData);
-        filteredData.forEach(function (entrada) {
-            var date = new Date(entrada.createdAt);
-            calendar.addEvent({
-                id: entrada.createdAt,
-                title: entrada.action.name === "REMOTE" ? "Remoto" : "Presencial",
-                start: date.toISOString().split('T')[0],
-                backgroundColor: entrada.action.name === "REMOTE" ? "red" : "green"
+        }).then(response => response.json())
+            .then(responseData => {
+                var filteredData = responseData.filter(val => {
+                    var date = new Date(val.createdAt);
+                    return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
+                    ocultarSpinner();
+                });
+                document.getElementById("remaining-days").innerText = calculateRemainingDays(filteredData);
+                filteredData.forEach(function (entrada) {
+                    var date = new Date(entrada.createdAt);
+                    calendar.addEvent({
+                        id: entrada.createdAt,
+                        title: entrada.action.name === "REMOTE" ? "Remoto" : "Presencial",
+                        start: date.toISOString().split('T')[0],
+                        backgroundColor: entrada.action.name === "REMOTE" ? "red" : "green"
+                    });
+                });
+            })
+            .catch(error => {
+                ocultarSpinner();
+                console.error('Error al llamar al servicio:', error);
             });
-        });
-    })
-    .catch(error => {
-        ocultarSpinner();
-        console.error('Error al llamar al servicio:', error);
-    });
 
-    
+
     }
 }
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      locale: "ES",
-      firstDay: 1,
-      eventClick: function(info) {
-        info.jsEvent.preventDefault(); // don't let the browser navigate
-        //redirect a pagina de edicion de actions
-        console.log(info.event.id);
-      }
+        initialView: 'dayGridMonth',
+        locale: "ES",
+        firstDay: 1,
+        eventClick: function (info) {
+            info.jsEvent.preventDefault(); // don't let the browser navigate
+            //redirect a pagina de edicion de actions
+            console.log(info.event.id);
+        }
     });
     calendar.render();
     mostrarRegistro();
-  });
+});
 
-  function obtenerCookie(nombre) {
+function obtenerCookie(nombre) {
     const cookies = document.cookie.split(';');
     for (const cookie of cookies) {
-      const [cookieNombre, cookieValor] = cookie.trim().split('=');
-      if (cookieNombre === nombre) {
-        return cookieValor;
-      }
+        const [cookieNombre, cookieValor] = cookie.trim().split('=');
+        if (cookieNombre === nombre) {
+            return cookieValor;
+        }
     }
     return null;
-  }
+}
 
-  function limpiarCookies() {
+function limpiarCookies() {
     let cookies = document.cookie.split(";");
 
     for (var i = 0; i < cookies.length; i++) {
@@ -190,14 +190,39 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 }
 
-function actualizarRegistro(){
+function actualizarRegistro() {
     let modificar = confirm("Desea actualizar el registro existente con esta nueva informacion");
 
-    if(modificar){
+    if (modificar) {
         console.log('llamar servicio de update');
-    }else {
+        let email = document.getElementById('email');
+        let presencial = document.getElementById('presencial');
+        let action = presencial.checked ? 1 : 2;
+
+        let body = {
+            email: email.value,
+            action: action
+        }
+
+        fetch(`https://clevendario-api.fly.dev/api/clevendario/action/update/${email.value}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify(body)
+        })
+            .then(response => response.json())
+            .then(responseData => {
+                console.log(responseData);
+                alert("El registro se ha actualizado correctamente")
+            })
+            .catch(error => {
+                console.error(error)
+            });
+    } else {
         console.log('no pasa nada');
-    }   
+    }
 }
 
 function mostrarSpinner() {
@@ -205,11 +230,11 @@ function mostrarSpinner() {
     spinner.style.display = "block";
     var spinner2 = document.getElementById("spinner2");
     spinner2.style.display = "block";
-  }
-  
-  function ocultarSpinner() {
+}
+
+function ocultarSpinner() {
     var spinner = document.getElementById("spinner");
     spinner.style.display = "none";
     var spinner2 = document.getElementById("spinner2");
     spinner2.style.display = "none";
-  }
+}
