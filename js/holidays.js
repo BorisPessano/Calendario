@@ -14,34 +14,23 @@ var holidays = [
     { date: "2023-12-25", description: "Navidad" },
 ];
 
-const token = obtenerCookie('token');
-
-if (token) {
-    let email = obtenerCookie('email')
-    let emailCampo = document.getElementById('email');
-    emailCampo.value = email;
-} else {
-    window.location.href = "login.html"
-}
-
-ocultarSpinner();
-
 function marcarAsistencia() {
 
     var email = document.getElementById('email');
     var presencial = document.getElementById('presencial');
     let action = 0
-    if (presencial.checked == true) {
+    if (presencial.value == 1) {
         action = 1
     } else {
         action = 2
     }
+
     let body = {
         email: email.value,
         action: action
     }
-    mostrarSpinner()
-    fetch('https://clevendario-api.fly.dev/api/clevendario/action', {
+
+    fetch('http://localhost:6001/api/clevendario/action', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -51,16 +40,9 @@ function marcarAsistencia() {
 
     }).then(response => response.json())
         .then(responseData => {
-            if (!responseData.message) {
-                mostrarRegistro();
-            } else {
-                alert("Ya existe un registro para este dia")
-                actualizarRegistro();
-            }
-            ocultarSpinner();
+            mostrarRegistro();
         })
         .catch(error => {
-            ocultarSpinner();
             console.error('Error al llamar al servicio:', error);
         });
     mostrarRegistro();
@@ -77,7 +59,10 @@ function calculateRemainingDays(presentDays) {
     const presentDaysCount = presentDays.length;
     const presentPercentage = (presentDaysCount / workDays) * 100;
 
-    return remainingDays = Math.ceil((0.6 * workDays) - presentDaysCount);
+    if (presentPercentage < 60) {
+        const remainingDays = Math.ceil((0.6 * workDays) - presentDaysCount);
+        alert(`Te faltan ${remainingDays} días más de asistencia a la oficina`);
+    }
 }
 
 function calculateWeekends(year, month) {
@@ -102,22 +87,12 @@ function mostrarFeriados() {
     })
 }
 
-function clearEvents() {
-    var listEvent = calendar.getEvents();
-    listEvent.forEach(event => {
-        event.remove()
-    });
-}
-
 function mostrarRegistro() {
-    clearEvents();
-    mostrarFeriados();
     var registro = document.getElementById('registro') || '[]';
     var email = document.getElementById('email');
     registro = registro.value;
-    mostrarSpinner()
     if (email.value != '') {
-        fetch(`https://clevendario-api.fly.dev/api/clevendario/action/getByEmail?email=${email.value}`, {
+        fetch(`http://localhost:6001/api/clevendario/action/getByEmail?email=${email.value}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -129,9 +104,8 @@ function mostrarRegistro() {
                 var filteredData = responseData.filter(val => {
                     var date = new Date(val.createdAt);
                     return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
-                    ocultarSpinner();
                 });
-                document.getElementById("remaining-days").innerText = calculateRemainingDays(filteredData);
+                calculateRemainingDays(filteredData);
                 filteredData.forEach(function (entrada) {
                     var date = new Date(entrada.createdAt);
                     calendar.addEvent({
@@ -143,7 +117,6 @@ function mostrarRegistro() {
                 });
             })
             .catch(error => {
-                ocultarSpinner();
                 console.error('Error al llamar al servicio:', error);
             });
 
@@ -151,6 +124,8 @@ function mostrarRegistro() {
     }
 }
 
+// Mostrar el registro al cargar la página
+mostrarRegistro();
 
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
@@ -165,76 +140,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     calendar.render();
+    mostrarFeriados();
     mostrarRegistro();
 });
-
-function obtenerCookie(nombre) {
-    const cookies = document.cookie.split(';');
-    for (const cookie of cookies) {
-        const [cookieNombre, cookieValor] = cookie.trim().split('=');
-        if (cookieNombre === nombre) {
-            return cookieValor;
-        }
-    }
-    return null;
-}
-
-function limpiarCookies() {
-    let cookies = document.cookie.split(";");
-
-    for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i];
-        var igualPos = cookie.indexOf("=");
-        var nombre = igualPos > -1 ? cookie.substr(0, igualPos) : cookie;
-        document.cookie = nombre + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
-    }
-}
-
-function actualizarRegistro() {
-    let modificar = confirm("Desea actualizar el registro existente con esta nueva informacion");
-
-    if (modificar) {
-        console.log('llamar servicio de update');
-        let email = document.getElementById('email');
-        let presencial = document.getElementById('presencial');
-        let action = presencial.checked ? 1 : 2;
-
-        let body = {
-            email: email.value,
-            action: action
-        }
-
-        fetch(`https://clevendario-api.fly.dev/api/clevendario/action/update/${email.value}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify(body)
-        })
-            .then(response => response.json())
-            .then(responseData => {
-                console.log(responseData);
-                alert("El registro se ha actualizado correctamente")
-            })
-            .catch(error => {
-                console.error(error)
-            });
-    } else {
-        console.log('no pasa nada');
-    }
-}
-
-function mostrarSpinner() {
-    var spinner = document.getElementById("spinner");
-    spinner.style.display = "block";
-    var spinner2 = document.getElementById("spinner2");
-    spinner2.style.display = "block";
-}
-
-function ocultarSpinner() {
-    var spinner = document.getElementById("spinner");
-    spinner.style.display = "none";
-    var spinner2 = document.getElementById("spinner2");
-    spinner2.style.display = "none";
-}
