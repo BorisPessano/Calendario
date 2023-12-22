@@ -31,12 +31,11 @@ function marcarAsistencia() {
     var email = document.getElementById('email');
     var presencial = document.getElementById('presencial');
     let action = 0
-    if (presencial.value == 'presencial'){
+    if (presencial.checked == true){
         action = 1
     } else {
         action = 2
     }
-    console.log('Accion: ', action)
     let body = {
         email: email.value,
         action: action
