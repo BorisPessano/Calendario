@@ -216,7 +216,8 @@ function actualizarRegistro() {
             .then(response => response.json())
             .then(responseData => {
                 console.log(responseData);
-                alert("El registro se ha actualizado correctamente")
+                alert("El registro se ha actualizado correctamente");
+                location.replace(location.href);
             })
             .catch(error => {
                 console.error(error)
