@@ -128,8 +128,9 @@ function mostrarRegistro() {
             .then(responseData => {
                 var filteredData = responseData.filter(val => {
                     var date = new Date(val.createdAt);
-                    return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
                     ocultarSpinner();
+                    return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
+                    
                 });
                 document.getElementById("remaining-days").innerText = calculateRemainingDays(filteredData);
                 filteredData.forEach(function (entrada) {
