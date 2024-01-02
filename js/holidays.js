@@ -11,7 +11,6 @@ var holidays = [
     { date: "2024-06-19", description: "Natalicio de Artigas" },
     { date: "2024-07-18", description: "Jura de la Constitución" },
     { date: "2024-12-25", description: "Navidad" },
-    { date: "2023-12-25", description: "Navidad" },
 ];
 
 function marcarAsistencia() {
