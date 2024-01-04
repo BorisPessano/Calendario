@@ -40,6 +40,11 @@
             <div class="card col-12" style="width: 200px;">
                 <h1>Registrar Asistencia</h1>
                 <form>
+                    <div class="form-group" id="userSelectContainer" style="display: none;">
+                        <label for="userSelect">Seleccionar Usuario:</label>
+                        <select class="form-control" id="userSelect" onchange="mostrarRegistroPorUsuario()">
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
                         <input type="text" class="form-control" id="email" placeholder="Ingrese su Email" style="width: 500px;">
