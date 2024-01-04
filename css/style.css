@@ -1,15 +1,23 @@
 .bg-light{
-    background-color: #000 !important;
+    /*background-color: #000 !important;*/
 }
 .navbar-brand{
-    color: #fff !important;
+    color: #000 !important;
 }
 .nav-item{
     color: #000 !important
 }
 
 input {
+    border: 2px solid #3498db;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 10px;
     height: 32px;
+}
+
+input:focus {
+    border-color: #2c3e50;
 }
 
 h1 {
