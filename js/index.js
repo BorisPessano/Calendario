@@ -1,17 +1,17 @@
 var calendar;
 
 var holidays = [
-    { date: "2024-01-01", description: "Año Nuevo" },
-    { date: "2024-02-12", description: "Carnaval" },
-    { date: "2024-02-13", description: "Carnaval" },
-    { date: "2024-03-28", description: "Semana de turismo" },
-    { date: "2024-03-29", description: "Semana de turismo" },
-    { date: "2024-04-22", description: "Desembarco de los 33. Feriado corrido de fecha" },
-    { date: "2024-05-01", description: "Día de los trabajadores" },
-    { date: "2024-06-19", description: "Natalicio de Artigas" },
-    { date: "2024-07-18", description: "Jura de la Constitución" },
-    { date: "2024-12-25", description: "Navidad" },
-    { date: "2023-12-25", description: "Navidad" },
+    { start: "2024-01-01", title: "Año Nuevo", color: "blue" },
+    { start: "2024-02-12", title: "Carnaval", color: "blue" },
+    { start: "2024-02-13", title: "Carnaval", color: "blue" },
+    { start: "2024-03-28", title: "Semana de turismo", color: "blue" },
+    { start: "2024-03-29", title: "Semana de turismo", color: "blue" },
+    { start: "2024-04-22", title: "Desembarco de los 33. Feriado corrido de fecha", color: "blue" },
+    { start: "2024-05-01", title: "Día de los trabajadores", color: "blue" },
+    { start: "2024-06-19", title: "Natalicio de Artigas", color: "blue" },
+    { start: "2024-07-18", title: "Jura de la Constitución", color: "blue" },
+    { start: "2024-12-25", title: "Navidad", color: "blue" },
+    { start: "2023-12-25", title: "Navidad", color: "blue" },
 ];
 
 const token = obtenerCookie('token');
@@ -110,8 +110,8 @@ function clearEvents() {
 }
 
 function mostrarRegistro() {
-    clearEvents();
-    mostrarFeriados();
+    //clearEvents();
+    //mostrarFeriados();
     var registro = document.getElementById('registro') || '[]';
     var email = document.getElementById('email');
     registro = registro.value;
@@ -159,6 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
         initialView: 'dayGridMonth',
         locale: "ES",
         firstDay: 1,
+        events: holidays,
         eventClick: function (info) {
             info.jsEvent.preventDefault(); // don't let the browser navigate
             //redirect a pagina de edicion de actions
