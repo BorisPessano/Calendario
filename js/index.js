@@ -20,6 +20,7 @@ if (token) {
     let email = obtenerCookie('email')
     let emailCampo = document.getElementById('email');
     emailCampo.value = email;
+
 }
 /* 
 else {
@@ -92,11 +93,9 @@ function calculateWeekends(year, month) {
 function mostrarFeriados() {
     holidays.filter(val => {
         var date = new Date(val.date);
-        console.log(date.getMonth(),new Date().getMonth())
         return date.getMonth() === new Date().getMonth() || date.getYear() === new Date().getYear();
     }).forEach(val => {
         var date = new Date(val.date);
-        console.log(date)
         calendar.addEvent({
             id: date,
             title: "Feriado",
@@ -243,4 +242,45 @@ function ocultarSpinner() {
     spinner.style.display = "none";
     var spinner2 = document.getElementById("spinner2");
     spinner2.style.display = "none";
+}
+
+
+function obtenerRol (){
+    let role = obtenerCookie('sesion')
+
+    console.log(role.Role)
+}
+
+function mostrarRegistroPorUsuario() {
+    clearEvents();
+    mostrarFeriados();
+    var userSelect = document.getElementById('userSelect');
+    var selectedEmail = userSelect.value;
+
+    if (selectedEmail != '') {
+        fetch(`https://clevendario-api.fly.dev/api/clevendario/action/getByEmail?email=${selectedEmail}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        }).then(response => response.json())
+            .then(responseData => {
+                var filteredData = responseData.filter(val => {
+                    var date = new Date(val.createdAt);
+                    ocultarSpinner();
+                    return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
+                });
+                document.getElementById("remaining-days").innerText = calculateRemainingDays(filteredData);
+                filteredData.forEach(function (entrada) {
+                    var date = new Date(entrada.createdAt);
+                    calendar.addEvent({
+                        id: entrada.createdAt,
+                        title: entrada.action.name === "REMOTE" ? "Remoto" : "Presencial",
+                        start: date.toISOString().split('T')[0],
+                        backgroundColor: entrada.action.name === "REMOTE" ? "red" : "green"
+                    });
+                });
+            })
+        }
 }

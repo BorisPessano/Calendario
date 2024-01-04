@@ -24,6 +24,7 @@ function Login() {
         if(responseData.access_token){
             establecerCookie('token',responseData.access_token,3600);
             establecerCookie('email',responseData.user.email,3600);
+            establecerCookie('sesion',responseData  ,3600);
             window.location.href = 'index.html';
         } else{
             alert("Usuario y/o contraseña incorrectos")

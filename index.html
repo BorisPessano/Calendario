@@ -35,7 +35,13 @@
         </a>
     </nav>
 
-    <div class="container mt-3">
+    <div class="form-group" id="userSelectContainer" style="display: none;">
+        <label for="userSelect">Seleccionar Usuario:</label>
+        <select class="form-control" id="userSelect" onchange="mostrarRegistroPorUsuario()">
+        </select>
+    </div>
+
+    <div class="container mt-3" id="registro">
         <div class="row justify-content-center">
             <div class="card col-12" style="width: 200px;">
                 <h1>Registrar Asistencia</h1>
@@ -90,3 +96,4 @@
 </body>
 
 </html>
+
