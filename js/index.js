@@ -74,7 +74,7 @@ function calculateRemainingDays(presentDays) {
     const totalDays = lastDay.getDate();
     const weekends = calculateWeekends(year, month);
     const workDays = totalDays - weekends;
-    const presentDaysCount = presentDays.length;
+    const presentDaysCount = presentDays.filter(val => val.action.id  === 1).length;
     const presentPercentage = (presentDaysCount / workDays) * 100;
 
     return remainingDays = Math.ceil((0.6 * workDays) - presentDaysCount);
