@@ -20,10 +20,12 @@ if (token) {
     let email = obtenerCookie('email')
     let emailCampo = document.getElementById('email');
     emailCampo.value = email;
-} else {
+}
+/* 
+else {
     window.location.href = "login.html"
 }
-
+*/
 ocultarSpinner();
 
 function marcarAsistencia() {
@@ -90,9 +92,11 @@ function calculateWeekends(year, month) {
 function mostrarFeriados() {
     holidays.filter(val => {
         var date = new Date(val.date);
-        return date.getMonth() === new Date().getMonth() && date.getYear() === new Date().getYear();
+        console.log(date.getMonth(),new Date().getMonth())
+        return date.getMonth() === new Date().getMonth() || date.getYear() === new Date().getYear();
     }).forEach(val => {
         var date = new Date(val.date);
+        console.log(date)
         calendar.addEvent({
             id: date,
             title: "Feriado",
